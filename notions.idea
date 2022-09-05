@@ -1,0 +1,77 @@
+.12/07/2022_19:10.75#83299 Hello world!!!                               it's a task
+                           The notion is going on!
+                           still going
+                           it has end, but not here!
+                           maybe here (YEAH!!!!).
+
+x13/07/2022_08:00.22#83300 Another type                                 task is done
+                           of notion
+                           for example a task
+
+>13/07/2022_10:32.24#83301 notion                                       pushed
+
+<13/07/2022_10:34.24#83302|14/07/2022_12:12.00 some text                scheduled
+
+-14/07/2022_13:32.24#83303 notion                                       canceled
+
++15/07/2022_11:51.92#83304 another notion                               note
+                           notion is continuing
+                           cont
+                           not
+                           e
+
+*15/07/2022_18:40.81#83305 another notion                               some very important task
+
+&16/07/2022_17:31.34#83306|01/01/2031_00:00.00 some text                goal
+                           here is a the goal text as well
+                           and here too
+
+$17/07/2022_16:26.99#83307|01/08/2022_00:00.00\01/01/2023   some text   daily task
+                           you can write some
+                           text under the parameters as well
+
+@18/07/2022_11:51.92#83308|03/01/2005_00:00.00 I was borned             some historical data
+
++15/07/2022_11:51.92#83309 To make and app for showing notions by different features:
+                           by type, data, keywords, parameters, id.
+                           User can combine the filters, remove some feature signs (for example data,
+                           type sign, id, time, some parameters).
+                           All the notions are synching with some server automatically when 
+                           the app is starting (don't show if it succeed) or by command (show the result).
+                           Notions are storing on the users' machines and on the server.
+                           Also make it possible to start the app in the specified
+                           default modes: year, month, week, day.
+                           Make a timeline mode (to-do list):
+                              
+                              18/07/2022_00:00.00
+                              18/07/2022_01:00.00
+                              18/07/2022_02:00.00
+                              18/07/2022_03:00.00
+                              18/07/2022_04:00.00
+                              18/07/2022_05:00.00
+                              18/07/2022_06:00.00
+                              18/07/2022_07:00.00 wake up!
+                                                  sport
+                                                  breakfast
+                              18/07/2022_08:00.00
+                              18/07/2022_09:00.00
+                              18/07/2022_10:00.00
+                              18/07/2022_11:00.00
+                              18/07/2022_12:00.00 to have a lunch
+                              18/07/2022_13:00.00
+                              18/07/2022_14:00.00
+                              18/07/2022_15:00.00
+                              18/07/2022_16:00.00
+                              18/07/2022_17:00.00
+                              18/07/2022_18:00.00
+                              18/07/2022_19:00.00 reading
+                              18/07/2022_20:00.00
+                              18/07/2022_21:00.00 go to bed
+                              18/07/2022_22:00.00
+                              18/07/2022_23:00.00
+
+                           It should include tasks scheduled to this day and the daily tasks.
+                           Create a help function where user can find the explanation about 
+                           notion-type signs, app parameters and notion-type parameters.
+                           Make it possible to read only one notion specified by its id.
+                           Make it possible to add a "favourite" notions.
