@@ -7,10 +7,10 @@
 #include <conio.h>
 using namespace std;
 int main () {
-        cout<<"Enter a type of the note:\n\t. is a task\n\tx means task is done\n\t> task is pushed\n\t< task is scheduled\n\t- task is canceled\n\t+ is note\n\t* is some very important task\n\t& is a goal\n\t& is daily task\n\t@ is historical event"<<endl;
+        cout<<"Enter a type of the note:\n\t. is a task\n\tx means task is done\n\t> task is pushed\n\t< task is scheduled\n\t- task is canceled\n\t+ is note\n\t* is some very important task\n\t& is a goal\n\t$ is daily task\n\t@ is historical event"<<endl;
         ofstream file;
         file.open("file.txt",ios_base::app);
-        string *str = new string [4095];
+        string str;
         string dot = ".";
         for(int i=0;i<3;i++) file<<endl;
         time_t ttime = time(0);
@@ -46,6 +46,9 @@ int main () {
                         case '&':
                                 cout<<"goal"<<endl;
                                 break;
+                        case '$':
+                                cout<<"daily task"<<endl;
+                                break;
                         case '@':
                                 cout<<"historical event"<<endl;
                                 break;
@@ -74,10 +77,26 @@ int main () {
         note_data.append(to_string(1+local_time->tm_sec));
         note_data.append("#");
         note_data.append(to_string(notion_id));
-        file<<note_data<<endl;
-        for(int i=0;getline(cin, str[i]),str[i].compare(".");i++) {
-                file<<"                        "<<str[i]<<endl;
+        if(type=='<') cout<<"Enter the destination date and time: dd/mm/yy_hh:mm";
+        else if(type=='&') cout<<"Enter end date of the goal achieving: dd/mm/yy_hh:mm";
+        else if(type=='@') cout<<"Enter a date of the event: dd/mm/yy_hh:mm";
+        else if(type=='$') cout<<"Enter end date of the daily task: dd/mm/yy_hh:mm";
+        if(type=='<'||type=='&'||type=='@'||type=='$') {
+                note_data.append("|");
+                printf("\033[14D");
+                string to_append;
+                cin>>to_append;
+                note_data.append(to_append);
+                if(type=='$') {
+                        cout<<"\nEnter a time when you will do the task: hh:mm";
+                        printf("\033[5D");
+                        cin>>to_append;
+                        note_data.append("\\");
+                        note_data.append(to_append);
+                }
         }
+        file<<note_data<<endl;
+        while(getline(cin,str)&&str.compare(".")) file<<"                        "<<str<<endl;
         cout<<"file saved!"<<endl;
         file.close();
         return 0;
