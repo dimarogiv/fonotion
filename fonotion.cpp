@@ -6,12 +6,13 @@
 #include <ctime>
 #include <conio.h>
 using namespace std;
+void show_help_info();
 int main () {
-        cout<<"Enter a type of the note:\n\t. is a task\n\tx means task is done\n\t> task is pushed\n\t< task is scheduled\n\t- task is canceled\n\t+ is note\n\t* is some very important task\n\t& is a goal\n\t$ is daily task\n\t@ is historical event"<<endl;
+        printf("\033[2J");
+        show_help_info();
         ofstream file;
         file.open("file.txt",ios_base::app);
         string str;
-        string dot = ".";
         for(int i=0;i<3;i++) file<<endl;
         time_t ttime = time(0);
         tm *local_time = localtime(&ttime);
@@ -21,42 +22,45 @@ int main () {
         do{
                 type=getch();
                 success=1;
+                printf("\033[2J\033[H");
                 switch(type){
                         case '.':
-                                cout<<"task"<<endl;
+                                printf("task");
                                 break;
                         case 'x':
-                                cout<<"task is done"<<endl;
+                                printf("task is done");
                                 break;
                         case '>':
-                                cout<<"task is pushed"<<endl;
+                                printf("task is pushed");
                                 break;
                         case '<':
-                                cout<<"task is scheduled"<<endl;
+                                printf("task is scheduled");
                                 break;
                         case '-':
-                                cout<<"task is canceled"<<endl;
+                                printf("task is canceled");
                                 break;
                         case '+':
-                                cout<<"note"<<endl;
+                                printf("note");
                                 break;
                         case '*':
-                                cout<<"important task"<<endl;
+                                printf("important task");
                                 break;
                         case '&':
-                                cout<<"goal"<<endl;
+                                printf("goal");
                                 break;
                         case '$':
-                                cout<<"daily task"<<endl;
+                                printf("daily task");
                                 break;
                         case '@':
-                                cout<<"historical event"<<endl;
+                                printf("historical event");
                                 break;
                         default:
-                                cout<<"there is no such type, choose one of suggested!"<<endl;
+                                printf("there is no such type, choose one of suggested!");
+                                show_help_info();
                                 success=0;
                 }
         }while(!success);
+        printf("\033[4;1H");
         string note_data;
         note_data.append(1,type);
         if(local_time->tm_mday<10)note_data.append("0");
@@ -97,7 +101,22 @@ int main () {
         }
         file<<note_data<<endl;
         while(getline(cin,str)&&str.compare(".")) file<<"                        "<<str<<endl;
-        cout<<"file saved!"<<endl;
+        printf("\033[2J\033[60;1Hfile saved!");
         file.close();
         return 0;
+}
+
+
+void show_help_info(){
+        printf("\033[18;48HEnter a type of the note:"
+                        "\033[20;50H. is a task"
+                        "\033[21;50Hx means task is done"
+                        "\033[22;50H> task is pushed"
+                        "\033[23;50H< task is scheduled"
+                        "\033[24;50H- task is canceled"
+                        "\033[25;50H+ is note"
+                        "\033[26;50H* is some very important task"
+                        "\033[27;50H& is a goal"
+                        "\033[28;50H$ is daily task"
+                        "\033[29;50H@ is historical event");
 }

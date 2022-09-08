@@ -1,3 +1,10 @@
 file.txt~
+.file.txt.un~
 fonotion.cpp~
+.fonotion.cpp.un~
+.git
+.gitignore
+.gitignore.swp
+..gitignore.un~
 makefile~
+.makefile.un~
