@@ -654,3 +654,35 @@ x06/09/2022_17:30:54#83298                        task
                         
                         
                         fdsafsd
+
+
+
+.14/09/2022_01:02:57#83298
+                        hello
+                        world
+                        it's a task
+
+
+
+.14/09/2022_01:06:26#83299
+                        hello
+                        I'm Dima
+
+
+
+.14/09/2022_01:07:07#83300
+                        Hi
+                        It's some another notion
+
+
+
+.14/09/2022_02:01:19#83301
+                        hello
+
+
+
+.14/09/2022_02:01:29#83302
+                        vim fonotion
+                        exit
+                        from 
+                        vim
