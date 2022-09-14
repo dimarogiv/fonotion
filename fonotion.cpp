@@ -73,11 +73,17 @@ int main () {
                                 getch();
                                 break;
                         case 's':
+                                char key;
+                                int pos;
+                                pos=0;
                                 printf("get list of the notes");
                                 note=get_list_of_notes(n);
-                                for(int i=0;i<note.size();i++) cout<<note[i]<<endl;
+                                while((key=getch())!='q'){
+                                        if(key=='j') pos++;
+                                        else if(key=='k') pos--;
+                                        for(int i=pos;i<pos+60;i++) cout<<note[i]<<endl;
+                                }
                                 n=0;
-                                getch();
                                 break;
                         case 'q':
                                 printf("exit");
