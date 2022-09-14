@@ -9,15 +9,15 @@
 using namespace std;
 void show_help_info();
 void init_notes();
-vector<string> get_list_of_notes();
+vector<string> get_list_of_notes(short int n);
 int last_note_id();
 vector<string> get_note_by_id(int id);
 void new_note(char type);
 int main () {
-        last_note_id();
         printf("\033[2J");
         show_help_info();
         bool exit_of_program;
+        short int n=0;
         do{
                 char type=getch();
                 exit_of_program=1;
@@ -74,8 +74,9 @@ int main () {
                                 break;
                         case 's':
                                 printf("get list of the notes");
-                                note=get_list_of_notes();
+                                note=get_list_of_notes(n);
                                 for(int i=0;i<note.size();i++) cout<<note[i]<<endl;
+                                n=0;
                                 getch();
                                 break;
                         case 'q':
@@ -83,7 +84,8 @@ int main () {
                                 exit_of_program=0;
                                 break;
                         default:
-                                printf("there is no such type, choose one of suggested!");
+                                if(type<='9'&&type>='0') n=type-48;
+                                else printf("there is no such type, choose one of suggested!");
                                 show_help_info();
                 }
         }while(exit_of_program);
@@ -108,28 +110,22 @@ void show_help_info(){
                         "\033[25;50Hs to show notes list");
 }
 
-void init_notes(){
-        ifstream file;
-        file.open ("file.txt");
-        string somestring;
-        int i=0;
-        while(getline(file,somestring)&&++i)cout<<i<<"\t"<<somestring<<endl;
-        file.close();
-}
-
 int last_note_id(){
         string tmp,num;
-        tmp=get_list_of_notes()[get_list_of_notes().size()-1];
-        for (int i=0;i<5;i++)num[i]=tmp.c_str()[21+i];                              // replace 21 by int number that is depending on a type of the current checking note
+        tmp=get_list_of_notes(0)[get_list_of_notes(0).size()-1];
+        for (int i=0;i<5;i++)num[i]=tmp.c_str()[21+i];
         return stoi(num);
 }
 
-vector<string> get_list_of_notes(){
+vector<string> get_list_of_notes(short int n){
         ifstream file;
         file.open ("file.txt");
         vector<string> somestring;
         string tmp;
-        while(getline(file,tmp)) if(tmp[0]!=' '&&tmp[0]!='\0') somestring.push_back(tmp);
+        while(getline(file,tmp)) if(tmp[0]!=' '&&tmp[0]!='\0') for(int i=0;i<=n&&tmp[0]!='\0';i++) {
+                somestring.push_back(tmp);
+                getline(file,tmp);
+        }
         file.close();
         return somestring;
 }
@@ -138,7 +134,7 @@ vector<string> get_note_by_id(int id){
         ifstream file;
         file.open ("file.txt");
         string tmp,num="0";
-        while(getline(file,tmp) && stoi(num)!=id) if(tmp!=""&&tmp[0]=='.') for(int i=0;i<5;i++) num[i]=tmp[21+i];     // replace tmp[0]=='.' by tmp[0]!=' ' after emptying the db; replace 21 by int number that is depending on a type of the current checking note
+        while(getline(file,tmp) && stoi(num)!=id) if(tmp!=""&&tmp[0]=='.') for(int i=0;i<5;i++) num[i]=tmp[21+i];     // replace tmp[0]=='.' by tmp[0]!=' ' after emptying the db
         vector<string> note;
         for(int i=0;tmp!="";i++){
                 note.push_back(tmp);

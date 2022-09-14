@@ -686,3 +686,18 @@ x06/09/2022_17:30:54#83298                        task
                         exit
                         from 
                         vim
+
+
+
+.14/09/2022_14:47:25#83303
+                        hello
+                        it's a many-string note
+                        of a task-type
+                        kdkd
+                        dima
+                        kdkdk
+                        it's not an end
+                        of the note
+                        j
+                        it's the end
+                        !
