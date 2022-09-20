@@ -23,6 +23,8 @@ int main () {
                 exit_of_program=1;
                 printf("\033[2J\033[H");
                 vector<string> note;
+                string remove_spaces_tmp;
+                int id;
                 switch(type){
                         case '.':
                                 printf("task");
@@ -66,7 +68,6 @@ int main () {
                                 break;
                         case 'r':
                                 printf("get a note by id\n\nenter an id: ");
-                                int id;
                                 cin>>id;
                                 note=get_note_by_id(id);
                                 for(int i=0;i<note.size();i++) cout<<note[i]<<endl;
@@ -78,13 +79,87 @@ int main () {
                                 pos=0;
                                 printf("get list of the notes");
                                 note=get_list_of_notes(n);
+                                for(int i=pos;i<pos+60;i++) cout<<note[i]<<endl;
                                 while((key=getch())!='q'){
                                         if(key=='j') pos++;
-                                        else if(key=='k') pos--;
+                                        else if(key=='k'&&pos>0) pos--;
                                         for(int i=pos;i<pos+60;i++) cout<<note[i]<<endl;
                                 }
                                 n=0;
+                                printf("\033[2J\033[H");
+                                show_help_info();
                                 break;
+                        case 'e':{                                                      // it should be an edit feature!
+                                         printf("\033[Hedit note by id\n\nenter an id: ");   // man tcgetattr; man TERMIOS; conio.h->kbhit; firefox :tab 4
+                                         cin>>id;
+                                         printf("\033[2J\033[H");
+                                         note=get_note_by_id(id);
+                                         for(int i=0;i<note.size();i++) cout<<note[i]<<endl;
+                                         char pressed;
+                                         short x,y;
+                                         x=1;
+                                         y=1;
+                                         printf("\033[H");
+                                         while(!((pressed=getch())==27&&kbhit()==0)){   // if ESC pressed exit of the loop 
+                                                 if(kbhit()){
+                                                         getch();
+                                                         pressed=getch();
+                                                         switch(pressed){
+                                                                 case 'A':
+                                                                         if(y>1){
+                                                                                 if(x>=note[--y].size()) x=note[y].size()-1;
+                                                                         }
+                                                                         break;
+                                                                 case 'B':
+                                                                         if(y<note.size()){
+                                                                                 if(x>=note[++y].size()) x=note[y].size()-1;
+                                                                         }
+                                                                         break;
+                                                                 case 'C':
+                                                                         if(x<note[y].size()-1) x++;
+                                                                         break;
+                                                                 case 'D':
+                                                                         if(x>1) x--;
+                                                                         else if(y>1) x=note[--y].size()-1;
+                                                         }
+                                                 } else if(pressed==127) {
+                                                         if(x>1) note[y].erase(note[y].begin()+(--x)); 
+                                                         else{
+                                                                 note.erase(note.begin()+y);
+                                                                 x=note[--y].size()-1;
+                                                         }
+                                                 } else if(pressed==10) note.insert(note.begin()+(x=1,++y),"");
+                                                 else note[y].insert(note[y].begin()+(x++),pressed);
+                                                 printf("\033[2J\033[H");
+                                                 for(int i=0;i<note.size();i++) printf("%s%c",note[i].c_str(),'\n');
+                                                 printf("\033[%d;%dH",y,x);
+                                         }
+                                         ifstream file;
+                                         file.open("file.txt");
+                                         vector<string> db;
+                                         string tmp;
+                                         while(!file.eof()){
+                                                 file>>tmp;
+                                                 db.push_back(tmp);
+                                         }
+                                         file.close();
+                                         int ybpos=-1,yepos;
+                                         for(int i=0;i<db.size();i++){
+                                                 if(id==stoi(db[i].substr(21,5))&&db[i][0]!=' '&&db[i][0]!='\0') {
+                                                         ybpos=(++i);
+                                                 }
+                                                 if(ybpos>-1&&db[i][0]=='\0') yepos=i;
+                                         }
+                                         db.erase(db.begin()+ybpos,db.begin()+yepos);
+                                         for(int i=0;i<yepos;i++) db.insert(db.begin()+ybpos+i,note[i]);
+                                         for(int a=ybpos;a<yepos;a++) for(int i=0;i<24;i++) db[a].insert(db[a].begin(),' ');
+                                         ofstream file1;
+                                         file1.open("file.txt");
+                                         for(int i=0;i<db.size();i++) file1<<db[i]<<endl;
+                                         file1.close();
+                                         show_help_info();
+                                         break;
+                                 }
                         case 'q':
                                 printf("exit");
                                 exit_of_program=0;
@@ -146,6 +221,7 @@ vector<string> get_note_by_id(int id){
                 note.push_back(tmp);
                 getline(file,tmp);
         }
+        for(int i=0;i<note.size();i++) note[i].erase(note[i].begin(),note[i].begin()+24);
         return note;
 }
 
