@@ -7,21 +7,30 @@
 #include <conio.h>
 #include <vector>
 using namespace std;
+void clear_screen() {printf("\033[2J");}
+void go_to_pos(int x, int y) {printf("\033[%d;%dH",y,x);}
+void move_up(int n) {printf("\033[%dA",n);}
+void move_down(int n) {printf("\033[%dB",n);}
+void move_left(int n) {printf("\033[%dD",n);}
+void move_right(int n) {printf("\033[%dC",n);}
+
 void show_help_info();
 void init_notes();
 vector<string> get_list_of_notes(short int n);
 int last_note_id();
 vector<string> get_note_by_id(int id);
 void new_note(char type);
+
 int main () {
-        printf("\033[2J");
+        clear_screen();
         show_help_info();
         bool exit_of_program;
         short int n=0;
         do{
                 char type=getch();
                 exit_of_program=1;
-                printf("\033[2J\033[H");
+                clear_screen();
+                go_to_pos(1,1);
                 vector<string> note;
                 string remove_spaces_tmp;
                 int id;
@@ -86,20 +95,23 @@ int main () {
                                         for(int i=pos;i<pos+60;i++) cout<<note[i]<<endl;
                                 }
                                 n=0;
-                                printf("\033[2J\033[H");
+                                clear_screen();
+                                go_to_pos(1,1);
                                 show_help_info();
                                 break;
                         case 'e':{                                                      // it should be an edit feature!
-                                         printf("\033[Hedit note by id\n\nenter an id: ");   // man tcgetattr; man TERMIOS; conio.h->kbhit; firefox :tab 4
+                                         go_to_pos(1,1);
+                                         printf("edit note by id\n\nenter an id: ");   // man tcgetattr; man TERMIOS; conio.h->kbhit; firefox :tab 4
                                          cin>>id;
-                                         printf("\033[2J\033[H");
+                                         clear_screen();
+                                         go_to_pos(1,1);
                                          note=get_note_by_id(id);
                                          for(int i=0;i<note.size();i++) cout<<note[i]<<endl;
                                          char pressed;
                                          short x,y;
                                          x=1;
                                          y=1;
-                                         printf("\033[H");
+                                         go_to_pos(1,1);
                                          while(!((pressed=getch())==27&&kbhit()==0)){   // if ESC pressed exit of the loop 
                                                  if(kbhit()){
                                                          getch();
@@ -130,9 +142,10 @@ int main () {
                                                          }
                                                  } else if(pressed==10) note.insert(note.begin()+(x=1,++y),"");
                                                  else note[y].insert(note[y].begin()+(x++),pressed);
-                                                 printf("\033[2J\033[H");
+                                                 clear_screen();
+                                                 go_to_pos(1,1);
                                                  for(int i=0;i<note.size();i++) printf("%s%c",note[i].c_str(),'\n');
-                                                 printf("\033[%d;%dH",y,x);
+                                                 go_to_pos(x,y);
                                          }
                                          ifstream file;
                                          file.open("file.txt");
@@ -175,20 +188,26 @@ int main () {
 
 
 void show_help_info(){
-        printf("\033[18;48HEnter a type of the note:"
-                        "\033[20;50H. is a task"
-                        "\033[21;50Hx means task is done"
-                        "\033[22;50H> task is pushed"
-                        "\033[23;50H< task is scheduled"
-                        "\033[24;50H- task is canceled"
-                        "\033[25;50H+ is note"
-                        "\033[26;50H* is some very important task"
-                        "\033[27;50H& is a goal"
-                        "\033[28;50H$ is daily task"
-                        "\033[29;50H@ is historical event"
-                        "\033[29;50Hr to read note by id"
-                        "\033[25;50Hq to exit"
-                        "\033[25;50Hs to show notes list");
+        go_to_pos(48,18);
+        printf("Enter a type of the note:");
+        go_to_pos(50,20);
+        printf(".is a task");
+        go_to_pos(50,21);
+        printf("x means task is done");
+        go_to_pos(50,22);
+        printf("> task is pushed");
+        go_to_pos(50,23);
+        printf("< task is scheduled");
+        go_to_pos(50,24);
+        printf("- task is canceled");
+        go_to_pos(50,25);
+        printf("+ is a note");
+        go_to_pos(50,26);
+        printf("*is some very important task");
+        go_to_pos(50,27);
+        printf("&is a goal");
+        go_to_pos(50,28);
+        printf("$is a daily task");
 }
 
 int last_note_id(){
@@ -226,7 +245,7 @@ vector<string> get_note_by_id(int id){
 }
 
 void new_note(char type){
-        printf("\033[4;1H");
+        go_to_pos(1,4);
         string note_data;
         note_data.append(1,type);
         time_t ttime = time(0);
@@ -256,13 +275,13 @@ void new_note(char type){
         else if(type=='$') cout<<"Enter end date of the daily task: dd/mm/yy_hh:mm";
         if(type=='<'||type=='&'||type=='@'||type=='$') {
                 note_data.append("|");
-                printf("\033[14D");
+                move_left(14);
                 string to_append;
                 cin>>to_append;
                 note_data.append(to_append);
                 if(type=='$') {
                         cout<<"\nEnter a time when you will do the task: hh:mm";
-                        printf("\033[5D");
+                        move_left(5);
                         cin>>to_append;
                         note_data.append("\\");
                         note_data.append(to_append);
@@ -274,6 +293,8 @@ void new_note(char type){
         for(int i=0;i<3;i++) file<<endl;
         file<<note_data<<endl;
         while(getline(cin,str)&&str.compare(".")) file<<"                        "<<str<<endl;
-        printf("\033[2J\033[60;1Hfile saved!");
+        clear_screen();
+        go_to_pos(1,60);
+        printf("file saved!");
         file.close();
 }
