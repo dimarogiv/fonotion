@@ -213,7 +213,7 @@ void show_help_info(){
 int last_note_id(){
         string tmp,num;
         tmp=get_list_of_notes(0)[get_list_of_notes(0).size()-1];
-        for (int i=0;i<5;i++)num[i]=tmp.c_str()[21+i];
+        for (int i=0;i<5;i++)num[i]=tmp.c_str()[22+i];
         return stoi(num);
 }
 
