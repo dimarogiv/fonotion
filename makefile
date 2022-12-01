@@ -1,2 +1,2 @@
 default:
-	g++ -g -o fonotion fonotion.cpp
+	g++ -g -lncurses -ltinfo -o fonotion fonotion.cpp
