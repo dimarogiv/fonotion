@@ -21,6 +21,8 @@ int last_note_id();
 vector<string> get_note(int id);
 vector<string> get_note(string);
 void new_note(char type);
+#include "list.h"
+#include "edit.h"
 
 int main () {
         initscr();
@@ -34,9 +36,6 @@ int main () {
         vector<int> branch;
         vector<string> note = get_note("Home");
         for(int i=0;i<note.size();i++) printw("%s%c",note[i].c_str(),'\n');
-        getch();
-        endwin();
-        return 0;
         do{
                 char command=getch();
                 exit_of_program=1;
@@ -59,117 +58,16 @@ int main () {
                                 move_left(1);
                                 break;
                         case 's':
-                                char key;
-                                int pos;
-                                pos=0;
-                                printf("get list of the notes");
-                                note=get_list_of_notes(n);
-                                for(int i=pos;i<pos+60;i++) cout<<note[i]<<endl;
-                                while((key=getch())!='q'){
-                                        if(key=='j') pos++;
-                                        else if(key=='k'&&pos>0) pos--;
-                                        for(int i=pos;i<pos+60;i++) cout<<note[i]<<endl;
-                                }
-                                n=0;
-                                clear();
-                                refresh();
-                                go_to_pos(1,1);
-                                show_help_info();
+                                show_list();
                                 break;
                         case 'e':                                                      // it should be an edit feature!
-                                go_to_pos(1,1);
-                                printf("edit note by id\n\nenter an id: ");   // man tcgetattr; man TERMIOS; conio.h->kbhit; firefox :tab 4
-                                cin>>id;
-                                clear();
-                                refresh();
-                                go_to_pos(1,1);
-                                note=get_note(id);
-                                for(int i=0;i<note.size();i++) cout<<note[i]<<endl;
-                                char pressed;
-                                short x,y;
-                                x=1;
-                                y=1;
-                                go_to_pos(1,1);
-                                keypad(stdscr, TRUE);
-                                while(!(
-                                                        nodelay(stdscr, TRUE),
-                                                        (pressed=getch())==27&&
-                                                        (getch()==-1)
-                                       )){   // if ESC pressed exit of the loop 
-                                        nodelay(stdscr, FALSE);
-                                        switch(pressed){
-                                                case KEY_UP:
-                                                        if(y>1){
-                                                                if(x>=note[--y].size()) x=note[y].size()-1;
-                                                        }
-                                                        break;
-                                                case KEY_DOWN:
-                                                        if(y<note.size()){
-                                                                if(x>=note[++y].size()) x=note[y].size()-1;
-                                                        }
-                                                        break;
-                                                case KEY_RIGHT:
-                                                        if(x<note[y].size()-1) x++;
-                                                        break;
-                                                case KEY_LEFT:
-                                                        if(x>1) x--;
-                                                        else if(y>1) x=note[--y].size()-1;
-                                                        break;
-                                                case KEY_BACKSPACE:
-                                                        if(x>1) note[y].erase(note[y].begin()+(--x)); 
-                                                        else{
-                                                                note.erase(note.begin()+y);
-                                                                x=note[--y].size()-1;
-                                                        }
-                                                        break;
-                                                case KEY_ENTER:
-                                                        note.insert(note.begin()+(x=1,++y),"");
-                                                        break;
-                                                default:
-                                                        note[y].insert(note[y].begin()+(x++),pressed);
-                                        }
-                                        keypad(stdscr, FALSE);  // delete it and initialization part is the very start of the code
-                                                                // and canceling it in the very end of the program work
-                                        clear();
-                                        refresh();
-                                        go_to_pos(1,1);
-                                        for(int i=0;i<note.size();i++) printf("%s%c",note[i].c_str(),'\n');
-                                        go_to_pos(x,y);
-                                }
-                                ifstream file;
-                                file.open("file.txt");
-                                vector<string> db;
-                                string tmp;
-                                while(!file.eof()){
-                                        file>>tmp;
-                                        db.push_back(tmp);
-                                }
-                                file.close();
-                                int ybpos=-1,yepos;
-                                for(int i=0;i<db.size();i++){
-                                        if(id==stoi(db[i].substr(22,5))&&db[i][0]!=' '&&db[i][0]!='\0') {
-                                                ybpos=(++i);
-                                        }
-                                        if(ybpos>-1&&db[i][0]=='\0') yepos=i;
-                                }
-                                db.erase(db.begin()+ybpos,db.begin()+yepos);
-                                for(int i=0;i<yepos;i++) db.insert(db.begin()+ybpos+i,note[i]);
-                                for(int a=ybpos;a<yepos;a++) for(int i=0;i<24;i++) db[a].insert(db[a].begin(),' ');
-                                ofstream file1;
-                                file1.open("file.txt");
-                                for(int i=0;i<db.size();i++) file1<<db[i]<<endl;
-                                file1.close();
-                                show_help_info();
-                                break;
-
+                                edit_note(); 
                         case 'q':
-                                printf("exit");
                                 exit_of_program=0;
                                 break;
                         default:
-                                if(command<='9'&&command>='0') n=command-48;
-                                else printf("%c %d there is no such command, choose one of suggested!", command, (int)command);
-                                show_help_info();
+                                if(command<='9'&&command>='0') n=command-'0';
+                                else printw("%c %d there is no such command, choose one of suggested!", command, (int)command);
                 }
         }while(exit_of_program);
         endwin();
