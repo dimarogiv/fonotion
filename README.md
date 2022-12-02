@@ -61,7 +61,7 @@ This project contributed by:
 - @VladSmyk
 
 This list is not long, because you are not here.  
-Text me in [telegram](t.me/dimonchik315) to contribute.  
+Text me in [telegram](https://t.me/dimonchik315) to contribute.  
   
 This projects is freely distributable under GNU License.  
 2022 - now.
